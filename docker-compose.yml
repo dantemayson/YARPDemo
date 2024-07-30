@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+  yarpdemo:
+    image: '${DOCKER_REGISTRY-}yarpdemo'
+    networks:
+      - yarpnet
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    ports:
+      - '6001:80'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  
+    build:
+      context: .
+      dockerfile: YARPDemo/Dockerfile
+  mvcservice:
+    image: '${DOCKER_REGISTRY-}mvcservice'
+    networks:
+      - yarpnet
+    ports:
+      - '5199:80'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  
+    build:
+      context: .
+      dockerfile: MVCService/Dockerfile
+  apiservice:
+    image: '${DOCKER_REGISTRY-}apiservice'
+    networks:
+      - yarpnet
+    ports:
+      - '5167:80'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  
+    build:
+      context: .
+      dockerfile: ApiService/Dockerfile
+networks:
+  yarpnet:     
